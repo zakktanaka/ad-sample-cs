@@ -35,6 +35,26 @@ namespace AdEasyWay.Math
             }
         }
 
+        public DualNumber Subtract(DualNumber other)
+        {
+            var l = Value;
+            var r = other.Value;
+
+            var vals = differentials.Keys
+                .Concat(other.differentials.Keys)
+                .Distinct();
+
+            var diffs = vals
+                .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
+                .ToDictionary(pair => pair.Value, pair => pair.Differential);
+
+            return new DualNumber
+            {
+                Value = l - r,
+                differentials = diffs,
+            };
+        }
+
         public DualNumber Multiply(DualNumber other)
         {
             var l = Value;
@@ -55,24 +75,5 @@ namespace AdEasyWay.Math
             };
         }
 
-        public DualNumber Subtract(DualNumber other)
-        {
-            var l = Value;
-            var r = other.Value;
-
-            var vals = differentials.Keys
-                .Concat(other.differentials.Keys)
-                .Distinct();
-
-            var diffs = vals
-                .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
-                .ToDictionary(pair => pair.Value, pair => pair.Differential);
-
-            return new DualNumber
-            {
-                Value = l - r,
-                differentials = diffs,
-            };
-        }
     }
 }
