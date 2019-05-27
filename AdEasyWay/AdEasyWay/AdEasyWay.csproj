@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Math\DualNumber.cs" />
     <Compile Include="Math\IAD.cs" />
+    <Compile Include="Math\TopDownAD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
