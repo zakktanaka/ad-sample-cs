@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AdEasyWay.Math
 {
-    public class DualNumber
+    public class DualNumber : IAD
     {
         public double Value { get; set; }
 
-        private Dictionary<DualNumber, double> differentials;
+        private Dictionary<IAD, double> differentials;
 
         private DualNumber()
         {
@@ -19,11 +19,11 @@ namespace AdEasyWay.Math
         public DualNumber(double value)
         {
             Value = value;
-            differentials = new Dictionary<DualNumber, double>();
+            differentials = new Dictionary<IAD, double>();
             differentials.Add(this, 1);
         }
 
-        public double DerivedBy(DualNumber other)
+        public double DerivedBy(IAD other)
         {
             if(differentials.TryGetValue(other, out double ret))
             {
@@ -75,5 +75,54 @@ namespace AdEasyWay.Math
             };
         }
 
+        public IAD Subtract(IAD other)
+        {
+            if(other is DualNumber)
+            {
+                return Subtract((DualNumber)other); 
+            }
+            else
+            {
+                var l = Value;
+                var r = other.Value;
+
+                var vals = differentials.Keys;
+
+                var diffs = vals
+                    .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
+                    .ToDictionary(pair => pair.Value, pair => pair.Differential);
+
+                return new DualNumber
+                {
+                    Value = l - r,
+                    differentials = diffs,
+                };
+            }
+        }
+
+        public IAD Multiply(IAD other)
+        {
+            if (other is DualNumber)
+            {
+                return Multiply((DualNumber)other);
+            }
+            else
+            {
+                var l = Value;
+                var r = other.Value;
+
+                var vals = differentials.Keys;
+
+                var diffs = vals
+                    .Select(v => new { Value = v, Differential = r * DerivedBy(v) + l * other.DerivedBy(v) })
+                    .ToDictionary(pair => pair.Value, pair => pair.Differential);
+
+                return new DualNumber
+                {
+                    Value = l - r,
+                    differentials = diffs,
+                };
+            }
+        }
     }
 }
