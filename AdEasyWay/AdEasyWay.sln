@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdEasyWay", "AdEasyWay\AdEasyWay.csproj", "{AE37F8E6-11E9-4405-84F5-8C013F8E43C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE37F8E6-11E9-4405-84F5-8C013F8E43C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE37F8E6-11E9-4405-84F5-8C013F8E43C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE37F8E6-11E9-4405-84F5-8C013F8E43C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE37F8E6-11E9-4405-84F5-8C013F8E43C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1E052DA-89AA-43E0-B8DD-CAAC54C038D2}
+	EndGlobalSection
+EndGlobal
