@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Finance\BlackScholes.cs" />
+    <Compile Include="Finance\OptionType.cs" />
     <Compile Include="Math\DualNumber.cs" />
     <Compile Include="Math\IAD.cs" />
     <Compile Include="Math\TopDownAD.cs" />

@@ -12,8 +12,24 @@ namespace AdEasyWay.Math
 
         double DerivedBy(IAD other);
 
+        IAD Add(IAD other);
+
         IAD Subtract(IAD other);
 
         IAD Multiply(IAD other);
+
+        IAD Divide(IAD other);
+
+        IAD Divide(double other);
+
+        IAD Negative();
+
+        IAD Exp();
+
+        IAD Log();
+
+        IAD Sqrt();
+
+        IAD Cdf();
     }
 }
