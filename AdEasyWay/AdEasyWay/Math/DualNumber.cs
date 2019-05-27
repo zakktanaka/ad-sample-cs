@@ -25,7 +25,7 @@ namespace AdEasyWay.Math
 
         public double DerivedBy(IAD other)
         {
-            if(differentials.TryGetValue(other, out double ret))
+            if (differentials.TryGetValue(other, out double ret))
             {
                 return ret;
             }
@@ -37,12 +37,47 @@ namespace AdEasyWay.Math
 
         public DualNumber Subtract(DualNumber other)
         {
-            var l = Value;
-            var r = other.Value;
+            return Subtract(other, GetKeysWith(other));
+        }
 
-            var vals = differentials.Keys
+        public DualNumber Multiply(DualNumber other)
+        {
+            return Multiply(other, GetKeysWith(other));
+        }
+
+        public IAD Subtract(IAD other)
+        {
+            return Subtract(other, GetKeysWith(other));
+        }
+
+        public IAD Multiply(IAD other)
+        {
+            return Multiply(other, GetKeysWith(other));
+        }
+
+        private IEnumerable<IAD> GetKeysWith(IAD other)
+        {
+            if (other is IAD)
+            {
+                return GetKeysWith((DualNumber)other);
+            }
+            else
+            {
+                return differentials.Keys;
+            }
+        }
+
+        private IEnumerable<IAD> GetKeysWith(DualNumber other)
+        {
+            return differentials.Keys
                 .Concat(other.differentials.Keys)
                 .Distinct();
+        }
+
+        private DualNumber Subtract(IAD other, IEnumerable<IAD> vals)
+        {
+            var l = Value;
+            var r = other.Value;
 
             var diffs = vals
                 .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
@@ -55,14 +90,10 @@ namespace AdEasyWay.Math
             };
         }
 
-        public DualNumber Multiply(DualNumber other)
+        private DualNumber Multiply(IAD other, IEnumerable<IAD> vals)
         {
             var l = Value;
             var r = other.Value;
-
-            var vals = differentials.Keys
-                .Concat(other.differentials.Keys)
-                .Distinct();
 
             var diffs = vals
                 .Select(v => new { Value = v, Differential = r * DerivedBy(v) + l * other.DerivedBy(v) })
@@ -73,56 +104,6 @@ namespace AdEasyWay.Math
                 Value = l * r,
                 differentials = diffs,
             };
-        }
-
-        public IAD Subtract(IAD other)
-        {
-            if(other is DualNumber)
-            {
-                return Subtract((DualNumber)other); 
-            }
-            else
-            {
-                var l = Value;
-                var r = other.Value;
-
-                var vals = differentials.Keys;
-
-                var diffs = vals
-                    .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
-                    .ToDictionary(pair => pair.Value, pair => pair.Differential);
-
-                return new DualNumber
-                {
-                    Value = l - r,
-                    differentials = diffs,
-                };
-            }
-        }
-
-        public IAD Multiply(IAD other)
-        {
-            if (other is DualNumber)
-            {
-                return Multiply((DualNumber)other);
-            }
-            else
-            {
-                var l = Value;
-                var r = other.Value;
-
-                var vals = differentials.Keys;
-
-                var diffs = vals
-                    .Select(v => new { Value = v, Differential = r * DerivedBy(v) + l * other.DerivedBy(v) })
-                    .ToDictionary(pair => pair.Value, pair => pair.Differential);
-
-                return new DualNumber
-                {
-                    Value = l - r,
-                    differentials = diffs,
-                };
-            }
         }
     }
 }
