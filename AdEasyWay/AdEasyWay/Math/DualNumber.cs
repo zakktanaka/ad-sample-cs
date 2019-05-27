@@ -10,14 +10,69 @@ namespace AdEasyWay.Math
     {
         public double Value { get; set; }
 
+        private Dictionary<DualNumber, double> differentials;
+
+        private DualNumber()
+        {
+        }
+
+        public DualNumber(double value)
+        {
+            Value = value;
+            differentials = new Dictionary<DualNumber, double>();
+            differentials.Add(this, 1);
+        }
+
+        public double DerivedBy(DualNumber other)
+        {
+            if(differentials.TryGetValue(other, out double ret))
+            {
+                return ret;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public DualNumber Multiply(DualNumber other)
         {
-            return new DualNumber { Value = Value * other.Value };
+            var l = Value;
+            var r = other.Value;
+
+            var vals = differentials.Keys
+                .Concat(other.differentials.Keys)
+                .Distinct();
+
+            var diffs = vals
+                .Select(v => new { Value = v, Differential = r * DerivedBy(v) + l * other.DerivedBy(v) })
+                .ToDictionary(pair =>pair.Value, pair => pair.Differential);
+
+            return new DualNumber
+            {
+                Value = l * r,
+                differentials = diffs,
+            };
         }
 
         public DualNumber Subtract(DualNumber other)
         {
-            return new DualNumber { Value = Value - other.Value };
+            var l = Value;
+            var r = other.Value;
+
+            var vals = differentials.Keys
+                .Concat(other.differentials.Keys)
+                .Distinct();
+
+            var diffs = vals
+                .Select(v => new { Value = v, Differential = DerivedBy(v) - other.DerivedBy(v) })
+                .ToDictionary(pair => pair.Value, pair => pair.Differential);
+
+            return new DualNumber
+            {
+                Value = l - r,
+                differentials = diffs,
+            };
         }
     }
 }

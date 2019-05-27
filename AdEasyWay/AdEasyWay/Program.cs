@@ -16,12 +16,14 @@ namespace AdEasyWay
 
         private static void TestFunction()
         {
-            var x = new DualNumber { Value = 1 };
-            var y = new DualNumber { Value = 2 };
+            var x = new DualNumber(1);
+            var y = new DualNumber(2);
 
             var ans = Function(x, y);
 
             Console.WriteLine(ans.Value == (1 * 1 - 2 * 2));
+            Console.WriteLine(ans.DerivedBy(x) == 2);
+            Console.WriteLine(ans.DerivedBy(y) == -4);
         }
 
         static void Main(string[] args)
