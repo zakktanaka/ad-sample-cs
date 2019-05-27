@@ -185,12 +185,12 @@ namespace AdEasyWay.Math
             var l = Value;
 
             var diffs = differentials.Keys
-                .Select(v => new { Value = v, Differential = System.Math.Exp(Value) * DerivedBy(v) })
+                .Select(v => new { Value = v, Differential = System.Math.Exp(l) * DerivedBy(v) })
                 .ToDictionary(pair => pair.Value, pair => pair.Differential);
 
             return new DualNumber
             {
-                Value = System.Math.Exp(Value),
+                Value = System.Math.Exp(l),
                 differentials = diffs,
             };
         }
@@ -215,12 +215,12 @@ namespace AdEasyWay.Math
             var l = Value;
 
             var diffs = differentials.Keys
-                .Select(v => new { Value = v, Differential = System.Math.Sqrt(l) * DerivedBy(v) })
+                .Select(v => new { Value = v, Differential = 0.5 / System.Math.Sqrt(l) * DerivedBy(v) })
                 .ToDictionary(pair => pair.Value, pair => pair.Differential);
 
             return new DualNumber
             {
-                Value = 0.5 / System.Math.Sqrt(l),
+                Value = System.Math.Sqrt(l),
                 differentials = diffs,
             };
         }
@@ -230,12 +230,12 @@ namespace AdEasyWay.Math
             var l = Value;
 
             var diffs = differentials.Keys
-                .Select(v => new { Value = v, Differential = Normal.CDF(0, 1, l) * DerivedBy(v) })
+                .Select(v => new { Value = v, Differential = Normal.PDF(0, 1, l) * DerivedBy(v) })
                 .ToDictionary(pair => pair.Value, pair => pair.Differential);
 
             return new DualNumber
             {
-                Value = Normal.PDF(0, 1, l),
+                Value = Normal.CDF(0, 1, l),
                 differentials = diffs,
             };
         }
